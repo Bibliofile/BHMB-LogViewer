@@ -1,0 +1,39 @@
+<style>
+    #logviewer {
+        overflow-y: scroll;
+        -webkit-overflow-scrolling: touch; /* iOS -.- */
+        height: 100%;
+        padding: 0 10px;
+    }
+    #logviewer select {
+        width: 100%;
+        max-width: 20em;
+    }
+    #logviewer button {
+        width: 5em;
+        padding: 5px;
+        border: 0;
+        border-radius: 7px;
+        color: #fff;
+        background: #182b73;
+    }
+</style>
+
+<div id="logviewer">
+    <h3>Options</h3>
+    <label>Display lines <input type="number" value="1000" data-config="showLines"/></label><br>
+    <label>Show date <input type="checkbox" data-config="date" checked/></label><br>
+    <label>Show time <input type="checkbox" data-config="time" checked/></label><br>
+    <!-- <label>Show world messages <input type="checkbox" data-config="world" /></label><br> -->
+
+    <h4>Choose a starting point</h4>
+    <select data-search="line" disabled></select>
+    <br><br>
+    <button data-search="line">Go</button>
+    <br>
+    <h4>Or enter a date</h4>
+    <input type="text" placeholder="Dec 1 2016" data-search="date">
+    <button data-search="date">Go</button>
+    <hr>
+    <pre id="logviewer_logs"></pre>
+</div>
