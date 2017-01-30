@@ -7,7 +7,7 @@ var logviewer = MessageBotExtension('logviewer');
 (function(ex) {
     'use strict';
     ex.tab = ex.ui.addTab('Logs');
-    ex.tab.innerHTML = '<style>#logviewer{overflow-y: scroll; -webkit-overflow-scrolling: touch; /* iOS -.- */ height: 100%; padding: 0 10px;}#logviewer select{width: 100%; max-width: 20em;}#logviewer button{width: 5em; padding: 5px; border: 0; border-radius: 7px; color: #fff; background: #182b73;}</style><div id="logviewer"> <h3>Options</h3> <label>Display lines <input type="number" value="1000" data-config="showLines"/></label><br><label>Show date <input type="checkbox" data-config="date" checked/></label><br><label>Show time <input type="checkbox" data-config="time" checked/></label><br><h4>Choose a starting point</h4> <select data-search="line" disabled></select> <br><br><button data-search="line">Go</button> <br><h4>Or enter a date</h4> <input type="text" placeholder="Dec 1 2016" data-search="date"> <button data-search="date">Go</button> <hr> <pre id="logviewer_logs"></pre></div>';
+    ex.tab.innerHTML = '<style>#logviewer select{width: 100%; max-width: 20em;}#logviewer button{width: 5em; padding: 5px; border: 0; border-radius: 7px; color: #fff; background: #182b73;}</style><div id="logviewer" class="container"> <h3 class="title">Options</h3> <label>Display lines <input class="input" type="number" value="1000" data-config="showLines"/></label><br><label>Show date <input class="checkbox" type="checkbox" data-config="date" checked/></label><br><label>Show time <input class="checkbox" type="checkbox" data-config="time" checked/></label><br><h4 class="title">Choose a starting point</h4> <select class="select" data-search="line" disabled></select> <br><button class="button" data-search="line">Go</button> <h4 class="title">Or enter a date</h4> <input class="input" type="text" placeholder="Dec 1 2016" data-search="date"> <button class="button" data-search="date">Go</button> <hr> <pre id="logviewer_logs"></pre></div>';
 
     ex.tab.setAttribute('style', 'padding: 0; height: calc(100% - 80px);');
 }(logviewer));
@@ -38,7 +38,7 @@ var logviewer = MessageBotExtension('logviewer');
     ex.tab.querySelector('button[data-search="date"]').addEventListener('click', function() {
         var d = Date.parse(ex.tab.querySelector('input[data-search="date"]').value);
         if (isNaN(d)) {
-            ex.ui.notify("Invalid date");
+            ex.ui.notify("[LogViewer] Error: Invalid date");
             return;
         }
 
