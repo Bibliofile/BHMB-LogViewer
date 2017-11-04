@@ -19,7 +19,7 @@ export default {
     string({ include: ['**/*.html', '**/*.css', '**/*.txt']}),
     nodeResolve(),
     commonjs(),
-    // uglify({}, minify),
+    uglify({}, minify),
   ],
 
   // Settings to avoid warnings and configure correctly for browsers
