@@ -1,0 +1,10 @@
+[
+  {
+    "user": "Bibliophile",
+    "id": "bibliofile/logs",
+    "package": "http://localhost:8090/bundle.js",
+    "title": "Logs",
+    "description": "Logs extension.",
+    "env": "all"
+  }
+]

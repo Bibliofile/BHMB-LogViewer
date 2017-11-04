@@ -1,0 +1,36 @@
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<template>
+  <li>
+    <span class="t"></span>
+    <span class="m"></span>
+  </li>
+</template>
+<div id="logviewer" class="container">
+  <h3 class="title is-3">Options</h3>
+  <div class="columns">
+    <div class="column">
+      Starting date:
+      <input class="input" data-for="start" />
+    </div>
+    <div class="column">
+      Ending date:
+      <input class="input" data-for="stop" />
+    </div>
+    <div class="column">
+      Search:
+      <input class="input" data-for="search" placeholder="Search..." />
+      <h4 class="title is-4">Tips:</h4>
+      <ul>
+        <li>You can use <code>online=NAME</code> to show chat from when someone is online</li>
+        <li>You can use <code>sender=NAME</code> to show chat from NAME</li>
+        <li>You can use <code>context=#</code> to show <code>#</code> messages around matched messages</li>
+        <li>To use names with spaces, remove the space.</li>
+        <li>Search is case-insensitive.</li>
+        <li><code>online=NAME1 online=NAME2</code> will show chat when <b>both</b> NAME1 and NAME2 are online.</li>
+        <li><code>sender=NAME1 sender=NAME2</code> will show chat from both NAME1 and NAME2.</li>
+      </ul>
+    </div>
+  </div>
+
+  <ol style="list-style-type: none"></ol>
+</div>

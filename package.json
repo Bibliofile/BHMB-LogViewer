@@ -1,0 +1,28 @@
+{
+  "name": "bhmb-logviewer",
+  "version": "1.0.1",
+  "description": "A viewer for blockheads server logs",
+  "main": "./build/bundle.js",
+  "scripts": {
+    "build": "rollup --config",
+    "build:watch": "rollup --config --watch"
+  },
+  "author": "Bibliofile",
+  "license": "ISC",
+  "devDependencies": {
+    "rollup": "^0.50.0",
+    "rollup-plugin-string": "^2.0.2",
+    "rollup-plugin-typescript2": "^0.8.0",
+    "tslint": "^5.8.0"
+  },
+  "dependencies": {
+    "@bhmb/bot": "^7.0.6",
+    "@bhmb/ui": "^1.0.2",
+    "flatpickr": "^4.0.6",
+    "rollup-plugin-commonjs": "^8.2.6",
+    "rollup-plugin-node-resolve": "^3.0.0",
+    "rollup-plugin-uglify": "^2.0.1",
+    "typescript": "^2.7.0-dev.20171102",
+    "uglify-es": "^3.1.6"
+  }
+}
