@@ -45,7 +45,8 @@ MessageBot.registerExtension('bibliofile/logs', async ex => {
   if (!ui) return
   let tab = ui.addTab('Logs')
   tab.innerHTML = html
-  const query = (selector: string) => tab.querySelector(selector) as HTMLElement
+  const query = <T extends HTMLElement>(selector: string) => tab.querySelector(selector) as T
+  const queryAll = <T extends HTMLElement>(selector: string) => tab.querySelectorAll(selector) as NodeListOf<T>
 
   let logs = await ex.world.getLogs(true)
   let startDate = logs[0].timestamp
@@ -56,11 +57,17 @@ MessageBot.registerExtension('bibliofile/logs', async ex => {
     let endIndex = logs.findIndex(entry => entry.timestamp >= endDate) + 1
 
     let list = query('ol')
-    let template = query('template') as HTMLTemplateElement
+    let template = query<HTMLTemplateElement>('template')
     while (list.firstChild) list.removeChild(list.firstChild)
 
-    let search = query('[data-for=search]') as HTMLInputElement
+    let search = query<HTMLInputElement>('[data-for=search]')
     let parsed = parse(search.value)
+
+    // Settings
+    let hideWorldMessages = query<HTMLInputElement>('[data-for=world_messages]').checked
+    let hideJoinMessages = query<HTMLInputElement>('[data-for=join_messages]').checked
+    let hideLeaveMessages = query<HTMLInputElement>('[data-for=leave_messages]').checked
+    let hideServerMessages = query<HTMLInputElement>('[data-for=server_messages]').checked
 
     let online = new Set<string>()
     let matchIndexes = findIndexes(logs, ({message}, index) => {
@@ -71,7 +78,7 @@ MessageBot.registerExtension('bibliofile/logs', async ex => {
 
       return [
         !parsed.search.length || parsed.search.some(v => message.toLocaleLowerCase().includes(v)),
-        !parsed.sender.length || parsed.sender.some(v => message.startsWith(v)),
+        !parsed.sender.length || parsed.sender.some(v => message.replace(/\s/g, '').startsWith(v + ':')),
         !parsed.online.length || parsed.online.every(name => online.has(name)),
         index >= startIndex,
         index <= endIndex
@@ -79,9 +86,20 @@ MessageBot.registerExtension('bibliofile/logs', async ex => {
     })
 
     let currentMatchIndex = 0
-    let toRender = logs.filter((_, index) => {
+    let toRender = logs.filter(({message}, index) => {
       if (index >= matchIndexes[currentMatchIndex] + parsed.context + 1) currentMatchIndex++
-      return Math.abs(matchIndexes[currentMatchIndex] - index) <= parsed.context
+      return [
+        // Matched by context
+        Math.abs(matchIndexes[currentMatchIndex] - index) <= parsed.context,
+        // Hide world messages?
+        !hideWorldMessages || /^[^a-z]+ /.test(message),
+        // Hide Join messages?
+        !hideJoinMessages || !message.includes(' - Player Connected '),
+        // Hide Leave messages?
+        !hideLeaveMessages || !(message.includes(' - Player Disconnected') || message.includes(' - Client disconnected:')),
+        // Hide server messages?
+        !hideServerMessages || !message.startsWith('SERVER: ')
+      ].every(Boolean)
     })
 
     if (toRender.length > 1000) {
@@ -91,8 +109,8 @@ MessageBot.registerExtension('bibliofile/logs', async ex => {
 
     toRender.forEach(entry => {
       ui.buildTemplate(template, list, [
-        { selector: '.t', text: `${entry.timestamp.toLocaleDateString()} ${entry.timestamp.toLocaleTimeString()}` },
-        { selector: '.m', text: entry.message }
+        { selector: '.time', text: `${entry.timestamp.toLocaleDateString()} ${entry.timestamp.toLocaleTimeString()}` },
+        { selector: '.entry', text: entry.message.replace(/\n/g, '\n\t') }
       ])
     })
   }
@@ -101,7 +119,7 @@ MessageBot.registerExtension('bibliofile/logs', async ex => {
   let pickerOptions: fpOptions = {
       enableTime: true,
       minDate: logs[0].timestamp,
-      inline: true,
+      // inline: true,
   }
   let pickers = [
     flatpickr(query('[data-for=start]'), { ...pickerOptions,
@@ -115,6 +133,13 @@ MessageBot.registerExtension('bibliofile/logs', async ex => {
   ]
 
   query('[data-for=search]').addEventListener('input', debouncedRender)
+
+  queryAll('.checkbox input').forEach(box => box.addEventListener('change', debouncedRender))
+
+  query('[data-for=toggle]').addEventListener('change', () => {
+    let to = query<HTMLInputElement>('[data-for=toggle]').checked
+    queryAll<HTMLInputElement>('.checkbox input').forEach(box => box.checked = to)
+  })
 
   ex.remove = () => {
     pickers.forEach(picker => picker.destroy())

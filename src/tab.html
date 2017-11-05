@@ -1,36 +1,88 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 <template>
   <li>
-    <span class="t"></span>
-    <span class="m"></span>
+    <span class="time"></span> &ndash; <span class="entry"></span>
   </li>
 </template>
-<div id="logviewer" class="container">
-  <h3 class="title is-3">Options</h3>
+
+<style>
+  #logviewer code {
+    background-clip: content-box;
+  }
+
+  #logviewer .example {
+    text-indent: 1em;
+  }
+
+  #logviewer .entry {
+    white-space: pre-wrap;
+  }
+</style>
+
+
+<div id="logviewer" class="container is-widescreen">
+  <h3 class="title">Options</h3>
   <div class="columns">
-    <div class="column">
-      Starting date:
-      <input class="input" data-for="start" />
+    <div class="column is-3">
+      <div class="field">
+        <label class="label">Starting date</label>
+        <div class="control">
+          <input class="input" data-for="start" />
+        </div>
+      </div>
+      <div class="field">
+        <label class="label">Ending date</label>
+        <div class="control">
+          <input class="input" data-for="stop"/>
+        </div>
+      </div>
+      <div class="field">
+        <label class="label">Filters</label>
+        <label class="checkbox">
+          <input type="checkbox" data-for="toggle"> Select All / None
+        </label>
+        <br>
+        <label class="checkbox">
+          <input type="checkbox" data-for="world_messages"> Hide World Messages
+        </label>
+        <br>
+        <label class="checkbox">
+          <input type="checkbox" data-for="server_messages"> Hide Server Messages
+        </label>
+        <br>
+        <label class="checkbox">
+          <input type="checkbox" data-for="join_messages"> Hide Join Messages
+        </label>
+        <br>
+        <label class="checkbox">
+          <input type="checkbox" data-for="leave_messages"> Hide Leave Messages
+        </label>
+      </div>
     </div>
     <div class="column">
-      Ending date:
-      <input class="input" data-for="stop" />
-    </div>
-    <div class="column">
-      Search:
-      <input class="input" data-for="search" placeholder="Search..." />
-      <h4 class="title is-4">Tips:</h4>
-      <ul>
-        <li>You can use <code>online=NAME</code> to show chat from when someone is online</li>
-        <li>You can use <code>sender=NAME</code> to show chat from NAME</li>
-        <li>You can use <code>context=#</code> to show <code>#</code> messages around matched messages</li>
-        <li>To use names with spaces, remove the space.</li>
-        <li>Search is case-insensitive.</li>
-        <li><code>online=NAME1 online=NAME2</code> will show chat when <b>both</b> NAME1 and NAME2 are online.</li>
-        <li><code>sender=NAME1 sender=NAME2</code> will show chat from both NAME1 and NAME2.</li>
-      </ul>
+      <div class="field">
+        <label class="label">Search</label>
+        <input class="input" data-for="search" />
+      </div>
+      <div class="field">
+          <label class="label">Tips</label>
+          <ul>
+            <li>Search is case-insensitive.</li>
+            <li>Use <code>online=NAME</code> to show chat when NAME is online.</li>
+            <li>Use <code>online=NAME1 online=NAME2</code> to show chat when NAME1 and NAME2 are both online.</li>
+            <li>Use <code>sender=NAME</code> to show chat from NAME.</li>
+            <li>Use <code>context=x</code> to show x number of messages around matched messages. </li>
+            <li class="example">Example: Use <code>context=5 sender=bob</code> to show five messages before and after messages from Bob.</li>
+            <li>To use names with spaces, remove the space. </li>
+            <li class="example">Example: Use <code>sender=bobt</code> to show chat from <code>BOB T</code>.</li>
+          </ul>
+      </div>
     </div>
   </div>
+
+  <hr>
+
+  <h3 class="title">Logs</h3>
 
   <ol style="list-style-type: none"></ol>
 </div>
