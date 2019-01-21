@@ -2,8 +2,7 @@ import string from 'rollup-plugin-string'
 import typescript from 'rollup-plugin-typescript2'
 import nodeResolve from 'rollup-plugin-node-resolve'
 import commonjs from 'rollup-plugin-commonjs'
-import uglify from 'rollup-plugin-uglify';
-import { minify } from 'uglify-es';
+import { terser } from 'rollup-plugin-terser'
 
 export default {
   input: './src/index.ts',
@@ -13,16 +12,17 @@ export default {
     format: 'umd',
     // For making debugging easier, fine to disable
     sourcemap: true,
+
+    globals: { '@bhmb/bot': '@bhmb/bot' }
   },
   plugins: [
     typescript(),
     string({ include: ['**/*.html', '**/*.css', '**/*.txt']}),
     nodeResolve(),
     commonjs(),
-    uglify({}, minify),
+    terser()
   ],
 
   // Settings to avoid warnings and configure correctly for browsers
   external: ['@bhmb/bot'],
-  globals: { '@bhmb/bot': '@bhmb/bot' }
 }

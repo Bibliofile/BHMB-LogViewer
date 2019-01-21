@@ -1,12 +1,12 @@
 import { MessageBot } from '@bhmb/bot'
 import { UIExtensionExports } from '@bhmb/ui'
-import flatpickr, { Options as fpOptions, Instance as fpInstance } from 'flatpickr'
+import flatpickr from 'flatpickr'
 
 function debounce(func: () => void, wait: number) {
   let timeout: number
   return () => {
     clearTimeout(timeout)
-    timeout = setTimeout(func, wait)
+    timeout = setTimeout(func, wait) as any
   }
 }
 
@@ -45,10 +45,16 @@ MessageBot.registerExtension('bibliofile/logs', async ex => {
   if (!ui) return
   let tab = ui.addTab('Logs')
   tab.innerHTML = html
-  const query = <T extends HTMLElement>(selector: string) => tab.querySelector(selector) as T
-  const queryAll = <T extends HTMLElement>(selector: string) => tab.querySelectorAll(selector) as NodeListOf<T>
+  const query = <T extends HTMLElement>(selector: string) => tab.querySelector<T>(selector)!
+  const queryAll = <T extends HTMLElement>(selector: string) => tab.querySelectorAll<T>(selector)
 
   let logs = await ex.world.getLogs(true)
+
+  if (!logs.length) {
+    ui.notify('No logs fetched, world offline?')
+    return
+  }
+
   let startDate = logs[0].timestamp
   let endDate = logs[logs.length - 1].timestamp
 
@@ -116,20 +122,22 @@ MessageBot.registerExtension('bibliofile/logs', async ex => {
   }
   const debouncedRender = debounce(render, 500)
 
-  let pickerOptions: fpOptions = {
+  let pickerOptions: flatpickr.Options.Options = {
       enableTime: true,
       minDate: logs[0].timestamp,
       // inline: true,
   }
   let pickers = [
-    flatpickr(query('[data-for=start]'), { ...pickerOptions,
+    flatpickr(query('[data-for=start]'), {
+      ...pickerOptions,
       defaultDate: startDate,
       onChange([date]) { startDate = date; debouncedRender() }
-    }) as fpInstance,
-    flatpickr(query('[data-for=stop]'), { ...pickerOptions,
+    }) as flatpickr.Instance,
+    flatpickr(query('[data-for=stop]'), {
+      ...pickerOptions,
       defaultDate: endDate,
       onChange([date]) { endDate = date; debouncedRender() }
-    }) as fpInstance,
+    }) as flatpickr.Instance,
   ]
 
   query('[data-for=search]').addEventListener('input', debouncedRender)

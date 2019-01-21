@@ -10,19 +10,18 @@
   "author": "Bibliofile",
   "license": "ISC",
   "devDependencies": {
-    "rollup": "^0.50.0",
+    "rollup": "^1.1.1",
     "rollup-plugin-string": "^2.0.2",
-    "rollup-plugin-typescript2": "^0.8.0",
-    "tslint": "^5.8.0"
+    "rollup-plugin-terser": "^4.0.2",
+    "rollup-plugin-typescript2": "^0.19.2",
+    "tslint": "^5.12.1"
   },
   "dependencies": {
-    "@bhmb/bot": "^7.0.6",
-    "@bhmb/ui": "^1.0.2",
-    "flatpickr": "^4.0.6",
-    "rollup-plugin-commonjs": "^8.2.6",
-    "rollup-plugin-node-resolve": "^3.0.0",
-    "rollup-plugin-uglify": "^2.0.1",
-    "typescript": "^2.7.0-dev.20171102",
-    "uglify-es": "^3.1.6"
+    "@bhmb/bot": "^7.1.2",
+    "@bhmb/ui": "^1.0.9",
+    "flatpickr": "^4.5.2",
+    "rollup-plugin-commonjs": "^9.2.0",
+    "rollup-plugin-node-resolve": "^4.0.0",
+    "typescript": "^3.2.4"
   }
 }
