@@ -74,6 +74,7 @@ MessageBot.registerExtension('bibliofile/logs', async ex => {
     let hideJoinMessages = query<HTMLInputElement>('[data-for=join_messages]').checked
     let hideLeaveMessages = query<HTMLInputElement>('[data-for=leave_messages]').checked
     let hideServerMessages = query<HTMLInputElement>('[data-for=server_messages]').checked
+    let matchAll = query<HTMLInputElement>('[data-for=match_all]').checked
 
     let online = new Set<string>()
     let matchIndexes = findIndexes(logs, ({message}, index) => {
@@ -83,7 +84,7 @@ MessageBot.registerExtension('bibliofile/logs', async ex => {
       if (leaveMatch) online.delete(leaveMatch[1].replace(/\s/g, ''))
 
       return [
-        !parsed.search.length || parsed.search.some(v => message.toLocaleLowerCase().includes(v)),
+        !parsed.search.length || parsed.search[matchAll ? 'every' : 'some'](v => message.toLocaleLowerCase().includes(v)),
         !parsed.sender.length || parsed.sender.some(v => message.replace(/\s/g, '').startsWith(v + ':')),
         !parsed.online.length || parsed.online.every(name => online.has(name)),
         index >= startIndex,
